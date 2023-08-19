@@ -43,7 +43,7 @@ exports.joinRoom = (req, res) => {
             res.redirect('/room/' + code)
         }
         else{
-            if(rooms[roomIndex].canBeJoined && rooms[roomIndex].members.length < process.env.PLAYERS){
+            if(rooms[roomIndex].canBeJoined && rooms[roomIndex].members.length < 5){
                 rooms[roomIndex].members.push(req.ip);
                 req.room = rooms[roomIndex]
                 console.log(rooms)
