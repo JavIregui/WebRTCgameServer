@@ -24,11 +24,14 @@ exports.createRoom = (req, res, next) => {
     });
     rooms[roomIndex].members.push(req.ip);
     req.room = rooms[roomIndex]
+    console.log(rooms)
     return next();
 }
 // Unirse a una sala
 exports.joinRoom = (req, res) => {
+    console.log(rooms)
     const code = req.body.roomCode.toUpperCase();
+    console.log(code)
     const roomIndex = rooms.map(function(e) { return e.code; }).indexOf(code);
     if(roomIndex < 0){
         res.redirect('/')
@@ -51,6 +54,8 @@ exports.joinRoom = (req, res) => {
 }
 // Buscar sala disponible
 exports.findRoom = (req, res, next) => {
+    console.log(rooms)
+
     if(rooms.length == 0){
         rooms.push({
             code: generateCode(6,chars),
