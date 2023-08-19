@@ -1,0 +1,23 @@
+{
+  "name": "webrtcgameserver",
+  "version": "1.0.0",
+  "description": "Creates a game server that uses WebRTC to comunicate the players inside the different game rooms.",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "WebRTC",
+    "game",
+    "server"
+  ],
+  "author": "Javier Iregui Conde",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-useragent": "^1.0.15",
+    "nodemon": "^3.0.1"
+  }
+}

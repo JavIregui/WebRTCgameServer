@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>WebRTC Game Server | <%= room.code %></title>
+    
+    <link href="../resources/css/styles.css" type="text/css" rel="stylesheet">
+
+    <script>
+        window.code = "<%=room.code%>";
+        window.private = <%=room.private%>;
+        window.players = <%=players%>;
+        window.isHead = <%=isHead%>;
+    </script>
+</head>
+
+<body>
+    <h1>ROOM CODE: <%= room.code %></h1>
+
+    <% if (room.private) {%>
+        <h2> This is a PRIVATE room </h2>
+    <% } else { %>
+        <h2> This is a PUBLIC room </h2> 
+    <%}%>
+
+    <% if (isHead) {%>
+        <h2> You are the head of the room </h2>
+    <% } else { %>
+        <h2>Someone else is the head of the room </h2> 
+    <%}%>
+
+    <h1>TOTAL MEMBERS: <%= players %></h1>
+
+    <p>The head of the room will be waiting for connections through Socket.io.
+        Once there's a new connection it will establish a data channel and the communication between the head and the new client will start.
+        In this scenario the head will act as a "server" to which the rest of the players can connect. This will make the central server
+        unnecessary and it will save it from managing the game communication and it's traffic. The connection counter will only change once
+        the data channel has recieved it's first message so we can use it to see how many clients are correctly connected and communicating amongst themselves.
+    </p>
+</body>
+
+</html>

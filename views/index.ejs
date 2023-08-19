@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>WebRTC Game Server</title>
+    
+    <link href="resources/css/styles.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+    <h1>WebRTC Game Server</h1>
+    <h2>by Javier Iregui</h2>
+
+    <div id="buttons">
+        <a href="/findRoom"> > FIND ROOM</a>
+        <p>Finds a random public room.<br> If there's no avaliable public room it creates a new public room</p>
+        <a href="/createRoom"> > CREATE ROOM</a>
+        <p>Creates a new private room</p>
+        <form action="/joinRoom" method="POST">
+            <input type="text" name="roomCode" placeholder="ROOM CODE">
+            <input type="submit" value="> JOIN">
+        </form>
+        <p>Joins either a public room or a private room using it's code</p>
+    </div>
+
+    <p>This website is an example of how my back-end system would work in a real online game.
+        The idea is to create a game room system in which the players comunicate amongst themselves when their in a room.
+        This allows less traffic to go through the server making it cheaper and easier to set up and work with.
+        The system uses Node.js and Express to manange the views and assign the rooms. Once a room is assigned,
+        the server is also encharged of the signaling to create a WebRTC connection between players.
+        The server uses WebSockets through Socket.io to manage the connections and then it creates a WebRTC Data Channel.
+    </p>
+
+</body>
+
+</html>
