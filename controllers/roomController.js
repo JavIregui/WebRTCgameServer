@@ -24,33 +24,26 @@ exports.createRoom = (req, res, next) => {
     });
     rooms[roomIndex].members.push(req.ip);
     req.room = rooms[roomIndex]
-    console.log(rooms)
     return next();
 }
 // Unirse a una sala
 exports.joinRoom = (req, res) => {
     const code = req.body.roomCode.toUpperCase();
-    console.log(code)
     const roomIndex = rooms.map(function(e) { return e.code; }).indexOf(code);
     if(roomIndex < 0){
         res.redirect('/')
-        console.log("ROOM NOT FOUND")
     } else {
-        console.log("ROOM FOUND")
         if(rooms[roomIndex].members.includes(req.ip)){
             req.room = rooms[roomIndex]
-            console.log(rooms)
             res.redirect('/room/' + code)
         }
         else{
             if(rooms[roomIndex].canBeJoined && rooms[roomIndex].members.length < 5){
                 rooms[roomIndex].members.push(req.ip);
                 req.room = rooms[roomIndex]
-                console.log(rooms)
                 res.redirect('/room/' + code)
             }
             else{
-                console.log("ROOM CAN'T BE JOINED")
                 res.redirect('/')
             }
         }
@@ -68,14 +61,12 @@ exports.findRoom = (req, res, next) => {
         });
         rooms[0].members.push(req.ip);
         req.room = rooms[0]
-        console.log(rooms)
         return next();
     } else {
         for(i = 0; i < rooms.length; i++){
-            if(!rooms[i].private && rooms[i].canBeJoined && rooms[i].members.length < process.env.PLAYERS && !rooms[i].members.includes(req.ip)){
+            if(!rooms[i].private && rooms[i].canBeJoined && rooms[i].members.length < 5 && !rooms[i].members.includes(req.ip)){
                 rooms[i].members.push(req.ip);
                 req.room = rooms[i]
-                console.log(rooms)
                 return next();
             }
         }
@@ -89,7 +80,6 @@ exports.findRoom = (req, res, next) => {
         });
         rooms[roomIndex].members.push(req.ip);
         req.room = rooms[roomIndex]
-        console.log(rooms)
         return next();
     }
 }
