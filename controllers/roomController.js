@@ -75,6 +75,7 @@ exports.findRoom = (req, res, next) => {
             if(!rooms[i].private && rooms[i].canBeJoined && rooms[i].members.length < process.env.PLAYERS && !rooms[i].members.includes(req.ip)){
                 rooms[i].members.push(req.ip);
                 req.room = rooms[i]
+                console.log(rooms)
                 return next();
             }
         }
