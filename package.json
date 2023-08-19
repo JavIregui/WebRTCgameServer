@@ -6,6 +6,10 @@
   "scripts": {
     "test": "test"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JavIregui/WebRTCgameServer.git"
+  },
   "keywords": [
     "WebRTC",
     "game",
@@ -13,6 +17,10 @@
   ],
   "author": "Javier Iregui Conde",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JavIregui/WebRTCgameServer/issues"
+  },
+  "homepage": "https://github.com/JavIregui/WebRTCgameServer#readme",
   "dependencies": {
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
