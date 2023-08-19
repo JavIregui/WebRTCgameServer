@@ -29,24 +29,28 @@ exports.createRoom = (req, res, next) => {
 }
 // Unirse a una sala
 exports.joinRoom = (req, res) => {
-    console.log(rooms)
     const code = req.body.roomCode.toUpperCase();
     console.log(code)
     const roomIndex = rooms.map(function(e) { return e.code; }).indexOf(code);
     if(roomIndex < 0){
         res.redirect('/')
+        console.log("ROOM NOT FOUND")
     } else {
+        console.log("ROOM FOUND")
         if(rooms[roomIndex].members.includes(req.ip)){
             req.room = rooms[roomIndex]
+            console.log(rooms)
             res.redirect('/room/' + code)
         }
         else{
             if(rooms[roomIndex].canBeJoined && rooms[roomIndex].members.length < process.env.PLAYERS){
                 rooms[roomIndex].members.push(req.ip);
                 req.room = rooms[roomIndex]
+                console.log(rooms)
                 res.redirect('/room/' + code)
             }
             else{
+                console.log("ROOM CAN'T BE JOINED")
                 res.redirect('/')
             }
         }
@@ -54,8 +58,6 @@ exports.joinRoom = (req, res) => {
 }
 // Buscar sala disponible
 exports.findRoom = (req, res, next) => {
-    console.log(rooms)
-
     if(rooms.length == 0){
         rooms.push({
             code: generateCode(6,chars),
@@ -66,6 +68,7 @@ exports.findRoom = (req, res, next) => {
         });
         rooms[0].members.push(req.ip);
         req.room = rooms[0]
+        console.log(rooms)
         return next();
     } else {
         for(i = 0; i < rooms.length; i++){
@@ -85,6 +88,7 @@ exports.findRoom = (req, res, next) => {
         });
         rooms[roomIndex].members.push(req.ip);
         req.room = rooms[roomIndex]
+        console.log(rooms)
         return next();
     }
 }
