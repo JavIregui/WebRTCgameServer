@@ -27,3 +27,7 @@ app.set('trust proxy', true)
 const server = app.listen(process.env.PORT, (req, res) => {
     console.log('SERVER RUNNING')
 })
+
+// Iniciamos Socket.io
+const io = require('socket.io')(server)
+socketController = require('./controllers/socketController')(io)

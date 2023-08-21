@@ -1,29 +1,41 @@
 const roomController = require('./roomController');
 
+const ipToSocketMap = new Map();
+
 exports = module.exports = function(io){
     io.sockets.on('connection', (socket) => {
-        socket.room = '';
-        socket.on('join', (msg) => {
-            socket.room = msg.room;
-            socket.clientIP = socket.handshake.address;
-        });
-        socket.on('disconnect', function() {
-            const roomIndex = roomController.gameRooms.map(function(e) { return e.code; }).indexOf(socket.room);
-            const clientIndex = roomController.gameRooms[roomIndex].members.indexOf(socket.clientIP);
+        const clientIP = socket.handshake.address;
+        ipToSocketMap.set(clientIP, socket);
 
-            roomController.gameRooms[roomIndex].members.splice(clientIndex, 1);
+        socket.emit('head?');
 
-            if(roomController.gameRooms[roomIndex].members.length == 0){
-                roomController.gameRooms.splice(roomIndex, 1);
-            }
-            else{
-                if(roomController.gameRooms[roomIndex].head == socket.clientIP){
-                    roomController.gameRooms[roomIndex].head = roomController.gameRooms[roomIndex].members[0]
+        socket.on('head', (head) => {
+            if(!head){
+                const roomHead = findRoomHead(clientIP, roomController.gameRooms)
+                if(!roomHead){
+                    socket.emit('redirect', "/");
+                }
+                else{
+                    const headSocket = ipToSocketMap.get(roomHead)
+                    if(!headSocket){
+                        socket.emit('redirect', "/");
+                    }
+                    else{
+                        headSocket.emit('offer?');
+                    }
                 }
             }
-            console.log(roomController.gameRooms)
         });
+
+        
     });
 }
 
-// Comprobar que está saliendo la gente y se está cambiando la cabeza
+function findRoomHead(clientIP, rooms) {
+    for (const room of rooms) {
+      if (room.members.includes(clientIP)) {
+        return room.head;
+      }
+    }
+    return null;
+}
