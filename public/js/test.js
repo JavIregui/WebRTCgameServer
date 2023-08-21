@@ -1,4 +1,4 @@
-const socket = io('https://webrtcgameserver-production.up.railway.app:1903');
+const socket = io('https://webrtcgameserver-production.up.railway.app:1903', { transports: ["websocket"] });
 
 socket.on('head?', () => {
     socket.emit('head', window.isHead)
