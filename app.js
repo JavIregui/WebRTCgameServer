@@ -30,7 +30,7 @@ app.use(cors({
 }));
 
 // Iniciamos el servidor
-const server = app.listen(process.env.PORT, (req, res) => {
+const server = app.listen(process.env.PORT, '0.0.0.0', (req, res) => {
     console.log('SERVER RUNNING')
 })
 
