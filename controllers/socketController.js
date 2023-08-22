@@ -42,7 +42,7 @@ exports = module.exports = function(io){
 }
 
 function findRoomHead(clientIP, rooms) {
-    for (const room of rooms) {
+    for (room in rooms) {
       if (room.members.includes(clientIP)) {
         return room.head;
       }
