@@ -1,6 +1,7 @@
 const socket = io('http://webrtcgameserver-production.up.railway.app:1903', { transports: ["websocket"] });
 
 socket.on('head?', () => {
+    console.log("kk")
     socket.emit('head', window.isHead)
 });
 
