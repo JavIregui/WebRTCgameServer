@@ -13,12 +13,12 @@ exports = module.exports = function(io){
             if(!head){
                 const roomHead = findRoomHead(clientIP, roomController.gameRooms)
                 if(!roomHead){
-                    socket.emit('redirect', "/");
+                    //socket.emit('redirect', "/");
                 }
                 else{
                     const headSocket = ipToSocketMap.get(roomHead)
                     if(!headSocket){
-                        socket.emit('redirect', "/");
+                        //socket.emit('redirect', "/");
                     }
                     else{
                         headSocket.emit('offer?');
