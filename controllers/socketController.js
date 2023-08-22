@@ -56,11 +56,8 @@ function findRoomHead(clientIP) {
     return null;
 }
 
-async function getPublicIP() {
-    try {
-        const response = await axios.get('https://api.ipify.org?format=json');
-        return response.data.ip;
-    } catch (error) {
-        throw error;
-    }
+function getPublicIP() {
+    const response = axios.get('https://api.ipify.org?format=json');
+    return response.data.ip;
+
 }
