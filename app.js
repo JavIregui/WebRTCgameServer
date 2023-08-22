@@ -34,5 +34,9 @@ const server = app.listen(process.env.PORT, (req, res) => {
 })
 
 // Iniciamos Socket.io
-const io = require('socket.io')(server)
+const io = require('socket.io')(server, {
+  cors: {
+    origin: '*',
+  },
+});
 socketController = require('./controllers/socketController')(io)
