@@ -12,19 +12,26 @@ exports = module.exports = function(io){
 
         socket.on('head', (head) => {
             if(!head){
+                console.log("NOT Head")
                 const roomHead = findRoomHead(clientIP, roomController.gameRooms)
                 if(!roomHead){
+                    console.log("HEAD NOT FOUND")
                     socket.emit('redirect', "/");
                 }
                 else{
                     const headSocket = ipToSocketMap.get(roomHead)
                     if(!headSocket){
+                        console.log("HEAD SOCKET NOT FOUND")
                         socket.emit('redirect', "/");
                     }
                     else{
                         headSocket.emit('offer?');
+                        console.log("WAITING FOR OFFER")
                     }
                 }
+            }
+            else{
+                console.log("Head")
             }
         });
 
