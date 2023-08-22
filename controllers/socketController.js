@@ -9,6 +9,7 @@ exports = module.exports = function(io){
         socket.emit('head?');
 
         socket.on('head', (head) => {
+            console.log(head)
             const clientIP = head.ip;
             ipToSocketMap.set(clientIP, socket);
 
