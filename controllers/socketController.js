@@ -4,6 +4,7 @@ const ipToSocketMap = new Map();
 
 exports = module.exports = function(io){
     io.sockets.on('connection', (socket) => {
+        console.log("Connected")
         const clientIP = socket.handshake.address;
         ipToSocketMap.set(clientIP, socket);
 
