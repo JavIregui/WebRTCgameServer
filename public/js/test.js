@@ -1,4 +1,4 @@
-const socket = io('https://104.196.232.237:443');
+const socket = io('http://104.196.232.237:443');
 
 socket.on('head?', () => {
     console.log("kk")
