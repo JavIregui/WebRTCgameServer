@@ -43,9 +43,10 @@ exports = module.exports = function(io){
 
 function findRoomHead(clientIP, rooms) {
     for (room in rooms) {
-      if (room.members.includes(clientIP)) {
-        return room.head;
-      }
+      //if (room.members.includes(clientIP)) {
+        //return room.head;
+      //}
+      console.log(room)
     }
     return null;
 }
