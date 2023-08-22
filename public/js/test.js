@@ -1,4 +1,4 @@
-const socket = io('https://webrtcgameserver-production.up.railway.app:1903', { transports: ["websocket"] });
+const socket = io('https://webrtcgameserver-production.up.railway.app:1903', { transports: ["websocket", 'polling', 'flashsocket'] });
 
 socket.on('head?', () => {
     console.log("kk")
