@@ -23,10 +23,11 @@ app.use('/', require('./routes/router'))
 // Confiar en Proxy para poder acceder a las IPs de los clientes
 app.set('trust proxy', true)
 
+// Configuramos el CORS
 const cors = require('cors');
 app.use(cors({
     origin: '*',
-  }));
+}));
 
 // Iniciamos el servidor
 const server = app.listen(process.env.PORT, (req, res) => {

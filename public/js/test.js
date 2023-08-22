@@ -1,4 +1,4 @@
-const socket = io('https://webrtcgameserver-production.up.railway.app:1903');
+const socket = io('104.196.232.237:443');
 
 socket.on('head?', () => {
     console.log("kk")
