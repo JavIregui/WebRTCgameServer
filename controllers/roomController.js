@@ -38,12 +38,14 @@ exports.joinRoom = async (req, res) => {
     } else {
         if(rooms[roomIndex].members.includes(ip)){
             req.room = rooms[roomIndex]
+            req.isHead = rooms[roomIndex].head == ip;
             res.redirect('/room/' + code)
         }
         else{
             if(rooms[roomIndex].canBeJoined && rooms[roomIndex].members.length < 5){
                 rooms[roomIndex].members.push(ip);
                 req.room = rooms[roomIndex]
+                req.isHead = rooms[roomIndex].head == ip;
                 res.redirect('/room/' + code)
             }
             else{
@@ -54,23 +56,25 @@ exports.joinRoom = async (req, res) => {
 }
 // Buscar sala disponible
 exports.findRoom = async (req, res, next) => {
+    const ip = await getPublicIP();
     if(rooms.length == 0){
         rooms.push({
             code: generateCode(6,chars),
             private: false,
             canBeJoined: true,
-            head: await getPublicIP(),
+            head: ip,
             members : [],
         });
         rooms[0].members.push(rooms[0].head);
         req.room = rooms[0]
+        req.isHead = rooms[roomIndex].head == ip;
         return next();
     } else {
-        const ip = await getPublicIP();
         for(i = 0; i < rooms.length; i++){
             if(!rooms[i].private && rooms[i].canBeJoined && rooms[i].members.length < 5 && !rooms[i].members.includes(ip)){
                 rooms[i].members.push(ip);
                 req.room = rooms[i]
+                req.isHead = rooms[roomIndex].head == ip;
                 return next();
             }
         }
@@ -79,11 +83,12 @@ exports.findRoom = async (req, res, next) => {
             code: generateCode(6,chars),
             private: false,
             canBeJoined: true,
-            head: await getPublicIP(),
+            head: ip,
             members : [],
         });
-        rooms[roomIndex].members.push(rooms[roomIndex].head);
+        rooms[roomIndex].members.push(ip);
         req.room = rooms[roomIndex]
+        req.isHead = rooms[roomIndex].head == ip;
         return next();
     }
 }
@@ -110,7 +115,7 @@ exports.isMember = async (req, res, next) =>{
 }
 exports.isHead = async (req, res, next) => {
     const ip = await getPublicIP();
-    req.isHead = req.room.head == ip;
+    //req.isHead = req.room.head == ip;
     return next();
 }
 
