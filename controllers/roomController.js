@@ -120,6 +120,8 @@ exports.isHead = async (req, res, next) => {
     const ip = await getPublicIP();
     req.isHead = req.room.head == ip;
     console.log("CHECK SET ISHEAD to" + req.isHead)
+    console.log(ip)
+    console.log(req.room)
     return next();
 }
 
