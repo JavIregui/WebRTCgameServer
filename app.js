@@ -39,5 +39,4 @@ const io = require('socket.io')(server, {
     origin: '*',
   },
 });
-io.set('transports', ['websocket']);
 socketController = require('./controllers/socketController')(io)
