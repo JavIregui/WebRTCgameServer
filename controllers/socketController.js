@@ -43,11 +43,14 @@ exports = module.exports = function(io){
 
 function findRoomHead(clientIP) {
     console.log(roomController.gameRooms)
-    for (room in roomController.gameRooms) {
+    for (let i = 0; i < roomController.gameRooms.length; i++) { 
+        console.log(roomController.gameRooms[i].head);
+    }
+    //for (room in roomController.gameRooms) {
       //if (room.members.includes(clientIP)) {
         //return room.head;
       //}
-      console.log(room.head)
-    }
+      //console.log()
+    //}
     return null;
 }
