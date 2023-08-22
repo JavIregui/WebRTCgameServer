@@ -13,7 +13,7 @@ exports = module.exports = function(io){
         socket.on('head', (head) => {
             if(!head){
                 console.log("NOT Head")
-                const roomHead = findRoomHead(clientIP, roomController.gameRooms)
+                const roomHead = findRoomHead(clientIP)
                 console.log("ClientIP = " + clientIP)
                 console.log("HeadIP = " + roomHead)
                 if(!roomHead){
@@ -41,8 +41,9 @@ exports = module.exports = function(io){
     });
 }
 
-function findRoomHead(clientIP, rooms) {
-    for (room in rooms) {
+function findRoomHead(clientIP) {
+    console.log(roomController.gameRooms)
+    for (room in roomController.gameRooms) {
       //if (room.members.includes(clientIP)) {
         //return room.head;
       //}
