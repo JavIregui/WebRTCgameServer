@@ -5,7 +5,7 @@ socket.on('head?', () => {
 });
 
 socket.on('redirect', (destination) => {
-    //window.location.href = destination;
+    window.location.href = destination;
 });
 
 socket.on('offer?', () => {
