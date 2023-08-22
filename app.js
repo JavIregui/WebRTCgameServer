@@ -28,6 +28,11 @@ app.use(cors({
     origin: '*',
   }));
 
+// Iniciamos el servidor
+const server = app.listen(process.env.PORT, (req, res) => {
+    console.log('SERVER RUNNING')
+})
+
 // Iniciamos Socket.io
 const io = require('socket.io')(server, {
   cors: {
@@ -35,8 +40,3 @@ const io = require('socket.io')(server, {
   },
 });
 socketController = require('./controllers/socketController')(io)
-
-// Iniciamos el servidor
-const server = app.listen(process.env.PORT, (req, res) => {
-  console.log('SERVER RUNNING')
-})
