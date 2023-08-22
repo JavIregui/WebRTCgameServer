@@ -17,14 +17,15 @@ function generateCode(length, chars) {
 // Crear sala
 exports.createRoom = async (req, res, next) => {
     roomIndex = rooms.length;
+    const ip = await getPublicIP();
     rooms.push({
         code: generateCode(6,chars),
         private: true,
         canBeJoined: true,
-        head: await getPublicIP(),
+        head: ip,
         members : [],
     });
-    rooms[roomIndex].members.push(rooms[roomIndex].head);
+    rooms[roomIndex].members.push(ip);
     req.room = rooms[roomIndex]
     req.isHead = rooms[roomIndex].head == ip;
     console.log("CREATE ROOM  SET ISHEAD to" + req.isHead)
