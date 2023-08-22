@@ -115,7 +115,7 @@ exports.isMember = async (req, res, next) =>{
 }
 exports.isHead = async (req, res, next) => {
     const ip = await getPublicIP();
-    //req.isHead = req.room.head == ip;
+    req.isHead = req.room.head == ip;
     return next();
 }
 
