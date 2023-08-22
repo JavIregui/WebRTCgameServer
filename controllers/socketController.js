@@ -6,12 +6,12 @@ const ipToSocketMap = new Map();
 exports = module.exports = function(io){
     io.sockets.on('connection', async (socket) => {
         console.log("Connected")
-        const clientIP = getPublicIP();
+        const clientIP = await getPublicIP();
         ipToSocketMap.set(clientIP, socket);
 
         socket.emit('head?');
 
-        socket.on('head', async (head) => {
+        socket.on('head', (head) => {
             if(!head){
                 console.log("NOT Head")
                 const roomHead = findRoomHead(clientIP)
