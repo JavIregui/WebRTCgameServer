@@ -46,7 +46,7 @@ function findRoomHead(clientIP, rooms) {
       //if (room.members.includes(clientIP)) {
         //return room.head;
       //}
-      console.log(room)
+      console.log(room.head)
     }
     return null;
 }
