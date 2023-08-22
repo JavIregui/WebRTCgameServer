@@ -1,18 +1,18 @@
 const roomController = require('./roomController');
-const axios = require('axios');
 
 const ipToSocketMap = new Map();
 
 exports = module.exports = function(io){
     io.sockets.on('connection', async (socket) => {
         console.log("Connected")
-        const clientIP = await getPublicIP();
-        ipToSocketMap.set(clientIP, socket);
 
         socket.emit('head?');
 
         socket.on('head', (head) => {
-            if(!head){
+            const clientIP = head.ip;
+            ipToSocketMap.set(clientIP, socket);
+
+            if(!head.isHead){
                 console.log("NOT Head")
                 const roomHead = findRoomHead(clientIP)
                 console.log("ClientIP = " + clientIP)
@@ -51,13 +51,4 @@ function findRoomHead(clientIP) {
         }
     }
     return null;
-}
-
-async function getPublicIP() {
-    try {
-        const response = await axios.get('https://api.ipify.org?format=json');
-        return response.data.ip;
-    } catch (error) {
-        throw error;
-    }
 }

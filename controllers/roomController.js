@@ -1,5 +1,3 @@
-const axios = require('axios');
-
 // Lista de Salas
 var rooms = [];
 
@@ -15,40 +13,34 @@ function generateCode(length, chars) {
 }
 
 // Crear sala
-exports.createRoom = async (req, res, next) => {
+exports.createRoom = (req, res, next) => {
     roomIndex = rooms.length;
-    const ip = await getPublicIP();
     rooms.push({
         code: generateCode(6,chars),
         private: true,
         canBeJoined: true,
-        head: ip,
+        head: req.ip,
         members : [],
     });
-    rooms[roomIndex].members.push(ip);
+    rooms[roomIndex].members.push(req.ip);
     req.room = rooms[roomIndex]
-    req.isHead = rooms[roomIndex].head == ip;
-    console.log("CREATE ROOM  SET ISHEAD to" + req.isHead)
     return next();
 }
 // Unirse a una sala
-exports.joinRoom = async (req, res) => {
+exports.joinRoom = (req, res) => {
     const code = req.body.roomCode.toUpperCase();
     const roomIndex = rooms.map(function(e) { return e.code; }).indexOf(code);
-    const ip = await getPublicIP();
     if(roomIndex < 0){
         res.redirect('/')
     } else {
-        if(rooms[roomIndex].members.includes(ip)){
+        if(rooms[roomIndex].members.includes(req.ip)){
             req.room = rooms[roomIndex]
-            req.isHead = rooms[roomIndex].head == ip;
             res.redirect('/room/' + code)
         }
         else{
             if(rooms[roomIndex].canBeJoined && rooms[roomIndex].members.length < 5){
-                rooms[roomIndex].members.push(ip);
+                rooms[roomIndex].members.push(req.ip);
                 req.room = rooms[roomIndex]
-                req.isHead = rooms[roomIndex].head == ip;
                 res.redirect('/room/' + code)
             }
             else{
@@ -58,26 +50,23 @@ exports.joinRoom = async (req, res) => {
     }
 }
 // Buscar sala disponible
-exports.findRoom = async (req, res, next) => {
-    const ip = await getPublicIP();
+exports.findRoom = (req, res, next) => {
     if(rooms.length == 0){
         rooms.push({
             code: generateCode(6,chars),
             private: false,
             canBeJoined: true,
-            head: ip,
+            head: req.ip,
             members : [],
         });
-        rooms[0].members.push(rooms[0].head);
+        rooms[0].members.push(req.ip);
         req.room = rooms[0]
-        req.isHead = rooms[roomIndex].head == ip;
         return next();
     } else {
         for(i = 0; i < rooms.length; i++){
-            if(!rooms[i].private && rooms[i].canBeJoined && rooms[i].members.length < 5 && !rooms[i].members.includes(ip)){
-                rooms[i].members.push(ip);
+            if(!rooms[i].private && rooms[i].canBeJoined && rooms[i].members.length < 5 && !rooms[i].members.includes(req.ip)){
+                rooms[i].members.push(req.ip);
                 req.room = rooms[i]
-                req.isHead = rooms[roomIndex].head == ip;
                 return next();
             }
         }
@@ -86,12 +75,11 @@ exports.findRoom = async (req, res, next) => {
             code: generateCode(6,chars),
             private: false,
             canBeJoined: true,
-            head: ip,
+            head: req.ip,
             members : [],
         });
-        rooms[roomIndex].members.push(ip);
+        rooms[roomIndex].members.push(req.ip);
         req.room = rooms[roomIndex]
-        req.isHead = rooms[roomIndex].head == ip;
         return next();
     }
 }
@@ -107,29 +95,11 @@ exports.getRoom = (req, res, next) =>{
         return next();
     }
 }
-exports.isMember = async (req, res, next) =>{
-    const ip = await getPublicIP();
-    if(req.room.members.includes(ip)){
+exports.isMember = (req, res, next) =>{
+    if(req.room.members.includes(req.ip)){
         return next();
     }
     else{
         res.redirect('/');
-    }
-}
-exports.isHead = async (req, res, next) => {
-    const ip = await getPublicIP();
-    req.isHead = req.room.head == ip;
-    console.log("CHECK SET ISHEAD to" + req.isHead)
-    console.log(ip)
-    console.log(req.room)
-    return next();
-}
-
-async function getPublicIP() {
-    try {
-        const response = await axios.get('https://api.ipify.org?format=json');
-        return response.data.ip;
-    } catch (error) {
-        throw error;
     }
 }

@@ -23,8 +23,8 @@ router.post('/joinRoom', roomController.joinRoom)
 router.get('/room', (req, res) => {
     res.redirect('/');
 });
-router.get('/room/:room', roomController.getRoom, roomController.isMember, roomController.isHead, (req, res) => {
-    res.render('room', {room: req.room, players: req.room.members.length, isHead: req.isHead})
+router.get('/room/:room', roomController.getRoom, roomController.isMember, (req, res) => {
+    res.render('room', {room: req.room, players: req.room.members.length, isHead: req.room.head == req.ip, clientIP: req.ip})
 });
 
 // Exportamos el router

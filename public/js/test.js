@@ -1,7 +1,7 @@
 const socket = io();
 
 socket.on('head?', () => {
-    socket.emit('head', window.isHead)
+    socket.emit('head', {ip: window.clientIP, isHead: window.isHead})
 });
 
 socket.on('redirect', (destination) => {
