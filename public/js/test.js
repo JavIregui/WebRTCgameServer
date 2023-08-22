@@ -1,4 +1,4 @@
-const socket = io('https://webrtcgameserver-production.up.railway.app:1903', { enabledTransports: ['ws', 'wss'] });
+const socket = io('http://webrtcgameserver-production.up.railway.app:1903');
 
 socket.on('head?', () => {
     console.log("kk")
