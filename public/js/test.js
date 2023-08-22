@@ -25,7 +25,7 @@ socket.on('offer?', () => {
     dataChannel.onopen = e => console.log("Connected");
     localConnection.onicecandidate = e => console.log(JSON.stringify(localConnection.localDescription));
     localConnection.createOffer().then(offer => {
-        console.log("OFFER: " + offer);
+        console.log("OFFER: " + JSON.stringify(offer));
         localConnection.setLocalDescription(offer)
     }).then(a => console.log("Offer Created"));
 });
