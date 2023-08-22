@@ -26,6 +26,8 @@ exports.createRoom = async (req, res, next) => {
     });
     rooms[roomIndex].members.push(rooms[roomIndex].head);
     req.room = rooms[roomIndex]
+    req.isHead = rooms[roomIndex].head == ip;
+    console.log("CREATE ROOM  SET ISHEAD to" + req.isHead)
     return next();
 }
 // Unirse a una sala
@@ -116,6 +118,7 @@ exports.isMember = async (req, res, next) =>{
 exports.isHead = async (req, res, next) => {
     const ip = await getPublicIP();
     req.isHead = req.room.head == ip;
+    console.log("CHECK SET ISHEAD to" + req.isHead)
     return next();
 }
 
