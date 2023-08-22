@@ -14,6 +14,8 @@ exports = module.exports = function(io){
             if(!head){
                 console.log("NOT Head")
                 const roomHead = findRoomHead(clientIP, roomController.gameRooms)
+                console.log("ClientIP = " + clientIP)
+                console.log("HeadIP = " + roomHead)
                 if(!roomHead){
                     console.log("HEAD NOT FOUND")
                     socket.emit('redirect', "/");
