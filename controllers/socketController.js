@@ -11,7 +11,7 @@ exports = module.exports = function(io){
 
         socket.emit('head?');
 
-        socket.on('head', (head) => {
+        socket.on('head', async (head) => {
             if(!head){
                 console.log("NOT Head")
                 const roomHead = findRoomHead(clientIP)
