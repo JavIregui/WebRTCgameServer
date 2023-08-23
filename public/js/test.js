@@ -23,7 +23,6 @@ socket.on('offer?', (data) => {
     dataChannel.onmessage = e => console.log(e.data);
     dataChannel.onopen = e => console.log("Connected");
 
-    //RTConnection.onicecandidate = e => socket.emit('offer', {client: data.client, head: data.head, offer: JSON.stringify(RTConnection.localDescription)});
     RTConnection.onicecandidate = e => {
         if (e.candidate) {
             socket.emit('newICEcandidate', {
@@ -46,7 +45,6 @@ socket.on('offer?', (data) => {
 socket.on('answer?', (data) => {
     const offer = data.offer;
 
-    //RTConnection.onicecandidate = e => socket.emit('answer', {client: data.client, head: data.head, answer: JSON.stringify(RTConnection.localDescription)});
     RTConnection.onicecandidate = e => {
         if (e.candidate) {
             socket.emit('newICEcandidate', {
@@ -84,5 +82,5 @@ socket.on('ice-candidate', iceCandidate => {
 socket.on('RTConnect', (data) => {
     const answer = data.answer;
     RTConnection.setRemoteDescription(answer);
-    dataChannel.send("HOLA");
+    dataChannel.send('hola');
 });
