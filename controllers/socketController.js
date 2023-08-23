@@ -28,6 +28,10 @@ exports = module.exports = function(io){
             }
         });
 
+        socket.on('offer', (data) => {
+            console.log(data.offer);
+        });
+
 
     });
 }

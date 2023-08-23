@@ -16,18 +16,12 @@ socket.on('offer?', () => {
     };
 
     const localConnection = new RTCPeerConnection(config);
-
     const dataChannel = localConnection.createDataChannel("dataChannel");
 
     dataChannel.onmessage = e => console.log(e.data);
     dataChannel.onopen = e => console.log("Connected");
-    //localConnection.onicecandidate = e => socket.emit('offer', )
-    
-    
-    
-    localConnection.onicecandidate = e => console.log(JSON.stringify(localConnection.localDescription));
-    localConnection.createOffer().then(offer => {
-        localConnection.setLocalDescription(offer)
-        console.log("OFFER CREATED")
-    });
+
+    localConnection.onicecandidate = e => socket.emit('offer', {offer: JSON.stringify(localConnection.localDescription)});
+    //localConnection.onicecandidate = e => console.log(JSON.stringify(localConnection.localDescription));
+    localConnection.createOffer().then(offer => localConnection.setLocalDescription(offer));
 });
