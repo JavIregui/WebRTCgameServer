@@ -30,7 +30,7 @@ socket.on('offer?', (data) => {
         return RTConnection.setLocalDescription(offer);
     })
     .then(() => {
-        socket.emit('offer', { client: data.client, head: data.head, offer: JSON.stringify(RTConnection.localDescription) });
+        socket.emit('offer', { client: data.client, head: data.head, offer: RTConnection.localDescription });
     })
 });
 
@@ -52,7 +52,7 @@ socket.on('answer?', (data) => {
         return RTConnection.setLocalDescription(answer);
     })
     .then(() => {
-        socket.emit('answer', { client: data.client, head: data.head, answer: JSON.stringify(RTConnection.localDescription) });
+        socket.emit('answer', { client: data.client, head: data.head, answer: RTConnection.localDescription });
     })
 });
 
