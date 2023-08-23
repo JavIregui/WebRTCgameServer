@@ -23,7 +23,7 @@ socket.on('offer?', (data) => {
     dataChannel.onmessage = e => console.log(e.data);
     dataChannel.onopen = e => {
         console.log("Connected");
-        dataChannel.send("Hola")
+        dataChannel.send("Hola soy Head hablandole al Cliente")
     }
 
     RTConnection.onicecandidate = e => {
@@ -63,7 +63,7 @@ socket.on('answer?', (data) => {
         dataChannel.onmessage = e => console.log(e.data)
         dataChannel.onopen = e => {
             console.log("Connected");
-            dataChannel.send("Hola")
+            dataChannel.send("Hola soy el Cliente hablandole a Head")
         }
     };
 
