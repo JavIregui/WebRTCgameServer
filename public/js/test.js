@@ -23,23 +23,37 @@ socket.on('offer?', (data) => {
     dataChannel.onmessage = e => console.log(e.data);
     dataChannel.onopen = e => console.log("Connected");
 
-    RTConnection.onicecandidate = e => socket.emit('offer', {client: data.client, head: data.head, offer: JSON.stringify(RTConnection.localDescription)});
-    RTConnection.createOffer().then(offer => RTConnection.setLocalDescription(offer));
+    //RTConnection.onicecandidate = e => socket.emit('offer', {client: data.client, head: data.head, offer: JSON.stringify(RTConnection.localDescription)});
+
+    RTConnection.createOffer()
+    .then(offer => {
+        return RTConnection.setLocalDescription(offer);
+    })
+    .then(() => {
+        socket.emit('offer', { client: data.client, head: data.head, offer: JSON.stringify(RTConnection.localDescription) });
+    })
 });
 
 socket.on('answer?', (data) => {
     const offer = data.offer;
 
-    RTConnection.onicecandidate = e => socket.emit('answer', {client: data.client, head: data.head, answer: JSON.stringify(RTConnection.localDescription)});
+    //RTConnection.onicecandidate = e => socket.emit('answer', {client: data.client, head: data.head, answer: JSON.stringify(RTConnection.localDescription)});
+
     RTConnection.ondatachannel = e => {
         dataChannel = e.channel
         dataChannel.onmessage = e => console.log(e.data)
         dataChannel.onopen = e => console.log("Connected")
     };
 
-    RTConnection.setRemoteDescription(data.offer);
+    RTConnection.setRemoteDescription(offer);
 
-    RTConnection.createAnswer().then(answer => RTConnection.setLocalDescription(answer));
+    RTConnection.createAnswer()
+    .then(answer => {
+        return RTConnection.setLocalDescription(answer);
+    })
+    .then(() => {
+        socket.emit('answer', { client: data.client, head: data.head, answer: JSON.stringify(RTConnection.localDescription) });
+    })
 });
 
 socket.on('RTConnect', (data) => {
