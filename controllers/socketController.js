@@ -38,6 +38,19 @@ exports = module.exports = function(io){
             headSocket.emit('RTConnect', {client: data.client, head: data.head, answer: data.answer})
         });
 
+        socket.on('newICEcandidate', data => {
+            var targetSocket
+            if(socket == ipToSocketMap.get(data.head)){
+                targetSocket = ipToSocketMap.get(data.client)
+            } else {
+                targetSocket = ipToSocketMap.get(data.head)
+            }
+            
+            if (targetSocket) {
+                targetSocket.emit('ice-candidate', data.candidate);
+            }
+        });
+
     });
 }
 

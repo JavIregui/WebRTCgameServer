@@ -24,6 +24,15 @@ socket.on('offer?', (data) => {
     dataChannel.onopen = e => console.log("Connected");
 
     //RTConnection.onicecandidate = e => socket.emit('offer', {client: data.client, head: data.head, offer: JSON.stringify(RTConnection.localDescription)});
+    RTConnection.onicecandidate = e => {
+        if (e.candidate) {
+            socket.emit('newICEcandidate', {
+                client: data.client,
+                head: data.head,
+                candidate: e.candidate
+            });
+        }
+    };
 
     RTConnection.createOffer()
     .then(offer => {
@@ -38,6 +47,15 @@ socket.on('answer?', (data) => {
     const offer = data.offer;
 
     //RTConnection.onicecandidate = e => socket.emit('answer', {client: data.client, head: data.head, answer: JSON.stringify(RTConnection.localDescription)});
+    RTConnection.onicecandidate = e => {
+        if (e.candidate) {
+            socket.emit('newICEcandidate', {
+                client: data.client,
+                head: data.head,
+                candidate: e.candidate
+            });
+        }
+    };
 
     RTConnection.ondatachannel = e => {
         dataChannel = e.channel
@@ -54,6 +72,13 @@ socket.on('answer?', (data) => {
     .then(() => {
         socket.emit('answer', { client: data.client, head: data.head, answer: RTConnection.localDescription });
     })
+});
+
+socket.on('ice-candidate', iceCandidate => {
+    RTConnection.addIceCandidate(new RTCIceCandidate(iceCandidate))
+    .catch(error => {
+        console.error('Error al agregar el candidato ICE:', error);
+    });
 });
 
 socket.on('RTConnect', (data) => {
