@@ -22,13 +22,14 @@ exports = module.exports = function(io){
                         socket.emit('redirect', "/");
                     }
                     else{
-                        headSocket.emit('offer?');
+                        headSocket.emit('offer?', clientIP);
                     }
                 }
             }
         });
 
         socket.on('offer', (data) => {
+            console.log(data.to);
             console.log(data.offer);
         });
 
