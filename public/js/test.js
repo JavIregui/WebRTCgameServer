@@ -21,7 +21,10 @@ socket.on('offer?', (data) => {
     dataChannel = RTConnection.createDataChannel("dataChannel");
 
     dataChannel.onmessage = e => console.log(e.data);
-    dataChannel.onopen = e => console.log("Connected");
+    dataChannel.onopen = e => {
+        console.log("Connected");
+        dataChannel.send("Hola")
+    }
 
     RTConnection.onicecandidate = e => {
         if (e.candidate) {
@@ -58,7 +61,10 @@ socket.on('answer?', (data) => {
     RTConnection.ondatachannel = e => {
         dataChannel = e.channel
         dataChannel.onmessage = e => console.log(e.data)
-        dataChannel.onopen = e => console.log("Connected")
+        dataChannel.onopen = e => {
+            console.log("Connected");
+            dataChannel.send("Hola")
+        }
     };
 
     RTConnection.setRemoteDescription(offer);
@@ -82,9 +88,4 @@ socket.on('ice-candidate', iceCandidate => {
 socket.on('RTConnect', (data) => {
     const answer = data.answer;
     RTConnection.setRemoteDescription(answer);
-    if (dataChannel.readyState === 'open') {
-        dataChannel.send('Hola');
-    } else {
-        console.log('El canal de datos no está en estado abierto.');
-    }
 });
