@@ -82,5 +82,9 @@ socket.on('ice-candidate', iceCandidate => {
 socket.on('RTConnect', (data) => {
     const answer = data.answer;
     RTConnection.setRemoteDescription(answer);
-    dataChannel.send('hola');
+    if (dataChannel.readyState === 'open') {
+        dataChannel.send('Hola');
+    } else {
+        console.log('El canal de datos no está en estado abierto.');
+    }
 });
