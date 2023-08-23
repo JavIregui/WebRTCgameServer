@@ -22,15 +22,15 @@ exports = module.exports = function(io){
                         socket.emit('redirect', "/");
                     }
                     else{
-                        headSocket.emit('offer?', clientIP);
+                        headSocket.emit('offer?', {client: clientIP, head: roomHead});
                     }
                 }
             }
         });
 
         socket.on('offer', (data) => {
-            console.log(data.to);
-            console.log(data.offer);
+            const clientSocket = ipToSocketMap.get(data.client)
+            clientSocket.emit('answer?', {client: data.client, head: data.head, offer: data.offer})
         });
 
 
