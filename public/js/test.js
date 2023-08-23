@@ -9,8 +9,6 @@ socket.on('redirect', (destination) => {
 });
 
 socket.on('offer?', () => {
-    console.log("Offer requested")
-
     const config = {
         iceServers: [
             { urls: "stun:stun.l.google.com:19302" },
@@ -23,9 +21,13 @@ socket.on('offer?', () => {
 
     dataChannel.onmessage = e => console.log(e.data);
     dataChannel.onopen = e => console.log("Connected");
+    //localConnection.onicecandidate = e => socket.emit('offer', )
+    
+    
+    
     localConnection.onicecandidate = e => console.log(JSON.stringify(localConnection.localDescription));
     localConnection.createOffer().then(offer => {
-        console.log("OFFER: " + JSON.stringify(offer));
         localConnection.setLocalDescription(offer)
-    }).then(a => console.log("Offer Created"));
+        console.log("OFFER CREATED")
+    });
 });
