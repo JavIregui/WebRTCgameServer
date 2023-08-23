@@ -33,6 +33,10 @@ exports = module.exports = function(io){
             clientSocket.emit('answer?', {client: data.client, head: data.head, offer: data.offer})
         });
 
+        socket.on('answer', (data) => {
+            const headSocket = ipToSocketMap.get(data.head)
+            headSocket.emit('RTConnect', {client: data.client, head: data.head, answer: data.answer})
+        });
 
     });
 }
