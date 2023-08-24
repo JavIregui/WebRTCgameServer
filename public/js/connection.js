@@ -21,14 +21,24 @@ socket.on('offer?', (data) => {
     RTConnections.set(data.client, RTConnection);
     RTConnection.dataChannel = RTConnection.createDataChannel("dataChannel");
 
-    RTConnection.dataChannel.onmessage = e => console.log(e.data);
+    RTConnection.dataChannel.onmessage = e => {
+        if(e.data.type == "numPlayers"){
+            window.connections = e.data.msg;
+            ChangeNum();
+        }
+        else {
+            console.log(e.data)
+        }
+    }
+    
     RTConnection.dataChannel.onopen = e => {
         console.log("Connected");
-        RTConnection.dataChannel.send("Hola soy Head hablandole al Cliente")
         window.connections =  window.connections + 1;
         ChangeNum();
-        // Cambiar por broadcast
-        RTConnection.dataChannel.send({type: "numPlayers", data: window.connections})
+
+        for (const [key, value] of RTConnections) {
+            value.dataChannel.send({type: "numPlayers", msg: window.connections});
+        }
     }
 
     RTConnection.onicecandidate = e => {
@@ -69,17 +79,16 @@ socket.on('answer?', (data) => {
         RTConnection.dataChannel = e.channel
         RTConnection.dataChannel.onmessage = e => {
             if(e.data.type == "numPlayers"){
-                window.connections = e.data.data;
+                window.connections = e.data.msg;
                 ChangeNum();
             }
-            else{
+            else {
                 console.log(e.data)
             }
         }
 
         RTConnection.dataChannel.onopen = e => {
             console.log("Connected");
-            RTConnection.dataChannel.send("Hola soy el Cliente hablandole a Head")
         }
     };
 
@@ -117,7 +126,10 @@ socket.on('RTConnect', (data) => {
 socket.on('playerLeft', () => {
     window.connections = window.connections - 1;
     ChangeNum();
-    // Añadir Broadcast
+    
+    for (const [key, value] of RTConnections) {
+        value.dataChannel.send({type: "numPlayers", msg: window.connections});
+    }
 })
 
 function ChangeNum(){

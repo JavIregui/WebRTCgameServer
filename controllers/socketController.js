@@ -39,7 +39,7 @@ exports = module.exports = function(io){
         });
 
         socket.on('newICEcandidate', data => {
-            var targetSocket
+            let targetSocket
             if(socket == ipToSocketMap.get(data.head)){
                 targetSocket = ipToSocketMap.get(data.client)
             } else {
@@ -60,7 +60,7 @@ exports = module.exports = function(io){
                 // Send every ember of the room to "/"
                 // I'll use OPTION 2
 
-                var members =  [];
+                let members =  [];
                 members = findMembers(clientIP)
                 for (let i = 0; i < members.length; i++) {
                     target = ipToSocketMap.get(members[i])
@@ -98,8 +98,8 @@ function findRoomHead(clientIP) {
 }
 
 function getIPfromSocket(map, socket) {
-    for (let [key, value] of map.entries()) {
-      if (value === socket)
+    for (const [key, value] of map) {
+        if (value === socket)
         return key;
     }
 }
