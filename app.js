@@ -1,40 +1,40 @@
-// Invocamos EXPRESS
+// EXPRESS
 const express = require('express');
 const app = express();
 
-// Seteamos el motor de plantillas
+// Setting the View Engine (EJS)
 app.set('view engine', 'ejs');
 
-// Seteamos el directorio público
+// Setting the public directory
 app.use('/resources', express.static('public'))
 app.use('/resources', express.static(__dirname + '/public'))
 
-// Seteamos urlencoded para que no haya errores al capturar los datos del formulario
+// Setting urlencoded to prevent errors from the form
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
 
-// Invocamos a dotenv
+// DOTENV
 const dotenv = require('dotenv');
 dotenv.config({path:'./env/.env'})
 
-// Llamar al Router
+// Setting the router
 app.use('/', require('./routes/router'))
 
-// Confiar en Proxy para poder acceder a las IPs de los clientes
+// Trusting the Proxy to ascess the client's IPs
 app.set('trust proxy', true)
 
-// Configuramos el CORS
+// CORS
 const cors = require('cors');
 app.use(cors({
     origin: '*',
 }));
 
-// Iniciamos el servidor
+// Starting the server
 const server = app.listen(process.env.PORT, '0.0.0.0', (req, res) => {
     console.log('SERVER RUNNING')
 })
 
-// Iniciamos Socket.io
+// SOCEKT.IO
 const io = require('socket.io')(server, {
   cors: {
     origin: '*',

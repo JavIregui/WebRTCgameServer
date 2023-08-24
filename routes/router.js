@@ -1,12 +1,12 @@
-// Invocamos Express
+// EXPRESS
 const express = require('express');
 const router = express.Router()
 
-// Invocamos a UserAgent
+// USER AGENT
 const useragent = require('express-useragent');
 router.use(useragent.express());
 
-// Invocamos a los controladores
+// CONTROLLERS
 const roomController = require('../controllers/roomController')
 
 router.get('/', (req, res) => {
@@ -27,5 +27,5 @@ router.get('/room/:room', roomController.getRoom, roomController.isMember, (req,
     res.render('room', {room: req.room, players: req.room.members.length, isHead: req.room.head == req.ip, clientIP: req.ip})
 });
 
-// Exportamos el router
+// Exporting the router
 module.exports = router;

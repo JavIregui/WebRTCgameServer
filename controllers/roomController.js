@@ -1,9 +1,8 @@
-// Lista de Salas
 var rooms = [];
 
 module.exports.gameRooms = rooms;
 
-// Generador de códigos
+// Code Generator
 var chars = '0123456789abcdefghijklmnopqrstuvwxyz';
 function generateCode(length, chars) {
     var code = '';
@@ -12,7 +11,7 @@ function generateCode(length, chars) {
     return result;
 }
 
-// Crear sala
+// Create Room
 exports.createRoom = (req, res, next) => {
     roomIndex = rooms.length;
     rooms.push({
@@ -26,7 +25,7 @@ exports.createRoom = (req, res, next) => {
     req.room = rooms[roomIndex]
     return next();
 }
-// Unirse a una sala
+// Join Room
 exports.joinRoom = (req, res) => {
     const code = req.body.roomCode.toUpperCase();
     const roomIndex = rooms.map(function(e) { return e.code; }).indexOf(code);
@@ -49,7 +48,7 @@ exports.joinRoom = (req, res) => {
         }
     }
 }
-// Buscar sala disponible
+// Find avaliable Room
 exports.findRoom = (req, res, next) => {
     if(rooms.length == 0){
         rooms.push({
