@@ -61,7 +61,7 @@ exports = module.exports = function(io){
                 // I'll use OPTION 2
 
                 members = findMembers(clientIP)
-                for (let index = 0; index < members.length; index++) {
+                for (let i = 0; i < members.length; i++) {
                     target = ipToSocketMap.get(members[i])
                     target.emit('redirect', "/");
                     ipToSocketMap.delete(members[i]);
