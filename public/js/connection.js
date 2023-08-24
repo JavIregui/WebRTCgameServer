@@ -135,3 +135,19 @@ socket.on('playerLeft', () => {
 function ChangeNum(){
     document.getElementById('num').innerHTML = "TOTAL MEMBERS: " + window.connections;
 }
+
+function sendLocalUpdate(data){
+    if(!window.isHead){
+        for (const [key, value] of RTConnections) {
+            value.dataChannel.send(data)
+        }
+    }
+}
+
+function broadcast(data){
+    if(window.isHead){
+        for (const [key, value] of RTConnections) {
+            value.dataChannel.send(data)
+        }
+    }
+}
