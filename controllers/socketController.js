@@ -60,6 +60,7 @@ exports = module.exports = function(io){
                 // Send every ember of the room to "/"
                 // I'll use OPTION 2
 
+                var members =  [];
                 members = findMembers(clientIP)
                 for (let i = 0; i < members.length; i++) {
                     target = ipToSocketMap.get(members[i])
@@ -77,7 +78,7 @@ exports = module.exports = function(io){
             else{
                 DeleteFromRoom(clientIP);
                 ipToSocketMap.delete(clientIP);
-                headSocket = ipToSocketMap.get(roomHead);
+                const headSocket = ipToSocketMap.get(roomHead);
                 headSocket.emit('playerLeft');
             }
 
