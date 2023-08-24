@@ -24,6 +24,10 @@ socket.on('offer?', (data) => {
     dataChannel.onopen = e => {
         console.log("Connected");
         dataChannel.send("Hola soy Head hablandole al Cliente")
+        console.log("Había " + window.connections + " conexiones");
+        window.connections =  window.connections + 1;
+        console.log("Ahora hay " + window.connections + " conexiones");
+        dataChannel.send({type: "numPlayers", data: window.connections})
     }
 
     RTConnection.onicecandidate = e => {
@@ -64,10 +68,6 @@ socket.on('answer?', (data) => {
         dataChannel.onopen = e => {
             console.log("Connected");
             dataChannel.send("Hola soy el Cliente hablandole a Head")
-            console.log("Había " + window.connections + " conexiones");
-            window.connections =  window.connections + 1;
-            console.log("Ahora hay " + window.connections + " conexiones");
-            dataChannel.send({type: "numPlayers", data: window.connections})
         }
     };
 
