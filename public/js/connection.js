@@ -6,8 +6,7 @@ const config = {
     ],
 };
 
-const RTConnection = new RTCPeerConnection(config);
-var dataChannel;
+var RTConnections = [];
 
 socket.on('head?', () => {
     socket.emit('head', {ip: window.clientIP, isHead: window.isHead})
@@ -18,15 +17,17 @@ socket.on('redirect', (destination) => {
 });
 
 socket.on('offer?', (data) => {
-    dataChannel = RTConnection.createDataChannel("dataChannel");
+    const RTConnection = new RTCPeerConnection(config);
+    RTConnections.push(RTConnection);
+    RTConnection.dataChannel = RTConnection.createDataChannel("dataChannel");
 
-    dataChannel.onmessage = e => console.log(e.data);
-    dataChannel.onopen = e => {
+    RTConnection.dataChannel.onmessage = e => console.log(e.data);
+    RTConnection.dataChannel.onopen = e => {
         console.log("Connected");
-        dataChannel.send("Hola soy Head hablandole al Cliente")
+        RTConnection.dataChannel.send("Hola soy Head hablandole al Cliente")
         window.connections =  window.connections + 1;
         ChangeNum();
-        dataChannel.send({type: "numPlayers", data: window.connections})
+        RTConnection.dataChannel.send({type: "numPlayers", data: window.connections})
     }
 
     RTConnection.onicecandidate = e => {
@@ -49,6 +50,8 @@ socket.on('offer?', (data) => {
 });
 
 socket.on('answer?', (data) => {
+    const RTConnection = new RTCPeerConnection(config);
+    RTConnections.push(RTConnection);
     const offer = data.offer;
 
     RTConnection.onicecandidate = e => {
@@ -62,8 +65,8 @@ socket.on('answer?', (data) => {
     };
 
     RTConnection.ondatachannel = e => {
-        dataChannel = e.channel
-        dataChannel.onmessage = e => {
+        RTConnection.dataChannel = e.channel
+        RTConnection.dataChannel.onmessage = e => {
             if(e.data.type == "numPlayers"){
                 window.connections = e.data.data;
                 ChangeNum();
@@ -73,9 +76,9 @@ socket.on('answer?', (data) => {
             }
         }
 
-        dataChannel.onopen = e => {
+        RTConnection.dataChannel.onopen = e => {
             console.log("Connected");
-            dataChannel.send("Hola soy el Cliente hablandole a Head")
+            RTConnection.dataChannel.send("Hola soy el Cliente hablandole a Head")
         }
     };
 
