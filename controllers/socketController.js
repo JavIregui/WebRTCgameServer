@@ -60,12 +60,11 @@ exports = module.exports = function(io){
                 // Send every ember of the room to "/"
                 // I'll use OPTION 2
 
-                let members =  [];
-                members = findMembers(clientIP)
-                for (let i = 0; i < members.length; i++) {
-                    target = ipToSocketMap.get(members[i])
+                roomIndex = findRoom(clientIP)
+                for (let i = 0; i < roomController.gameRooms[roomIndex].members.length; i++) {
+                    target = ipToSocketMap.get(roomController.gameRooms[roomIndex].members[i])
                     target.emit('redirect', "/");
-                    ipToSocketMap.delete(members[i]);
+                    ipToSocketMap.delete(roomController.gameRooms[roomIndex].members[i]);
                 }
 
                 for (let i = 0; i < roomController.gameRooms.length; i++) { 
@@ -104,10 +103,10 @@ function getIPfromSocket(map, socket) {
     }
 }
 
-function findMembers(headIP){
+function findRoom(headIP){
     for (let i = 0; i < roomController.gameRooms.length; i++) { 
         if (roomController.gameRooms[i].head == headIP) {
-            return roomController.gameRooms[i].members;
+            return i;
         }
     }
 }
