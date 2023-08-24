@@ -51,6 +51,39 @@ exports = module.exports = function(io){
             }
         });
 
+        socket.on('disconnect', () => {
+            const clientIP = getIPfromSocket(ipToSocketMap, socket)
+            const roomHead = findRoomHead(clientIP)
+            if(roomHead == clientIP){
+                // Head Change
+                // or
+                // Send every ember of the room to "/"
+                // I'll use OPTION 2
+
+                members = findMembers(clientIP)
+                for (let index = 0; index < members.length; index++) {
+                    target = ipToSocketMap.get(members[i])
+                    target.emit('redirect', "/");
+                    ipToSocketMap.delete(members[i]);
+                }
+
+                for (let i = 0; i < roomController.gameRooms.length; i++) { 
+                    if (roomController.gameRooms[i].head == clientIP) {
+                        roomController.gameRooms.splice(i, 1);
+                    }
+                }
+
+            }
+            else{
+                DeleteFromRoom(clientIP);
+                ipToSocketMap.delete(clientIP);
+                headSocket = ipToSocketMap.get(roomHead);
+                headSocket.emit('playerLeft');
+            }
+
+
+        });
+
     });
 }
 
@@ -61,4 +94,32 @@ function findRoomHead(clientIP) {
         }
     }
     return null;
+}
+
+function getIPfromSocket(map, socket) {
+    for (let [key, value] of map.entries()) {
+      if (value === socket)
+        return key;
+    }
+}
+
+function findMembers(headIP){
+    for (let i = 0; i < roomController.gameRooms.length; i++) { 
+        if (roomController.gameRooms[i].head == headIP) {
+            return roomController.gameRooms[i].members;
+        }
+    }
+}
+
+function DeleteFromRoom(client){
+    for (let i = 0; i < roomController.gameRooms.length; i++) { 
+        if (roomController.gameRooms[i].members.includes(client)) {
+            for (let j = 0; j < roomController.gameRooms[i].members.length; j++) {
+                if(roomController.gameRooms[i].members[j] == client) {
+                    roomController.gameRooms[i].members.splice(j, 1);
+                }
+                
+            }
+        }
+    }
 }

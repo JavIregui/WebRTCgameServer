@@ -102,6 +102,11 @@ socket.on('RTConnect', (data) => {
     RTConnection.setRemoteDescription(answer);
 });
 
+socket.on('playerLeft', () => {
+    window.connections = window.connections - 1;
+    ChangeNum();
+})
+
 function ChangeNum(){
     document.getElementById('num').innerHTML = "TOTAL MEMBERS: " + window.connections;
 }
