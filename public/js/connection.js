@@ -6,7 +6,7 @@ const config = {
     ],
 };
 
-var RTConnections = [];
+const RTConnections = new Map();
 
 socket.on('head?', () => {
     socket.emit('head', {ip: window.clientIP, isHead: window.isHead})
@@ -18,7 +18,7 @@ socket.on('redirect', (destination) => {
 
 socket.on('offer?', (data) => {
     const RTConnection = new RTCPeerConnection(config);
-    RTConnections.push(RTConnection);
+    RTConnections.set(data.client, RTConnection);
     RTConnection.dataChannel = RTConnection.createDataChannel("dataChannel");
 
     RTConnection.dataChannel.onmessage = e => console.log(e.data);
@@ -27,6 +27,7 @@ socket.on('offer?', (data) => {
         RTConnection.dataChannel.send("Hola soy Head hablandole al Cliente")
         window.connections =  window.connections + 1;
         ChangeNum();
+        // Cambiar por broadcast
         RTConnection.dataChannel.send({type: "numPlayers", data: window.connections})
     }
 
@@ -51,7 +52,7 @@ socket.on('offer?', (data) => {
 
 socket.on('answer?', (data) => {
     const RTConnection = new RTCPeerConnection(config);
-    RTConnections.push(RTConnection);
+    RTConnections.set(data.head, RTConnection);
     const offer = data.offer;
 
     RTConnection.onicecandidate = e => {
@@ -93,21 +94,30 @@ socket.on('answer?', (data) => {
     })
 });
 
-socket.on('ice-candidate', iceCandidate => {
-    RTConnection.addIceCandidate(new RTCIceCandidate(iceCandidate))
+socket.on('ice-candidate', data => {
+    var connection;
+    if(!window.isHead){
+        connection = RTConnections.get(data.head);
+    }
+    else{
+        connection = RTConnections.get(data.client);
+    }
+    connection.addIceCandidate(new RTCIceCandidate(data.candidate))
     .catch(error => {
         console.error('Error al agregar el candidato ICE:', error);
     });
 });
 
 socket.on('RTConnect', (data) => {
+    var connection = RTConnections.get(data.client);
     const answer = data.answer;
-    RTConnection.setRemoteDescription(answer);
+    connection.setRemoteDescription(answer);
 });
 
 socket.on('playerLeft', () => {
     window.connections = window.connections - 1;
     ChangeNum();
+    // Añadir Broadcast
 })
 
 function ChangeNum(){

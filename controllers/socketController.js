@@ -47,7 +47,7 @@ exports = module.exports = function(io){
             }
             
             if (targetSocket) {
-                targetSocket.emit('ice-candidate', data.candidate);
+                targetSocket.emit('ice-candidate', {candidate: data.candidate, head: data.head, client: data.client});
             }
         });
 
