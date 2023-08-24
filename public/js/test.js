@@ -24,9 +24,7 @@ socket.on('offer?', (data) => {
     dataChannel.onopen = e => {
         console.log("Connected");
         dataChannel.send("Hola soy Head hablandole al Cliente")
-        console.log("Había " + window.connections + " conexiones");
         window.connections =  window.connections + 1;
-        console.log("Ahora hay " + window.connections + " conexiones");
         dataChannel.send({type: "numPlayers", data: window.connections})
     }
 
@@ -64,7 +62,16 @@ socket.on('answer?', (data) => {
 
     RTConnection.ondatachannel = e => {
         dataChannel = e.channel
-        dataChannel.onmessage = e => console.log(e.data)
+        dataChannel.onmessage = e => {
+            if(e.data.type == "numPlayers"){
+                window.connections = e.data.data;
+                ChangeNum();
+            }
+            else{
+                console.log(e.data)
+            }
+        }
+
         dataChannel.onopen = e => {
             console.log("Connected");
             dataChannel.send("Hola soy el Cliente hablandole a Head")
@@ -93,3 +100,7 @@ socket.on('RTConnect', (data) => {
     const answer = data.answer;
     RTConnection.setRemoteDescription(answer);
 });
+
+function ChangeNum(){
+    document.getElementById('num').innerHTML = "TOTAL MEMBERS: " + window.connections;
+}
