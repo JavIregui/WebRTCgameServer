@@ -25,6 +25,7 @@ socket.on('offer?', (data) => {
         console.log("Connected");
         dataChannel.send("Hola soy Head hablandole al Cliente")
         window.connections =  window.connections + 1;
+        ChangeNum();
         dataChannel.send({type: "numPlayers", data: window.connections})
     }
 
