@@ -33,10 +33,10 @@ I might fix the issues found on the example website.
 git clone https://github.com/JavIregui/WebRTCgameServer.git
 ```
 
-### 2. Assing a room to the client
+### 2. Assign a room to the client
 
-Redirect the user to ``/room/<roomCode>``.
-This happens automatically when redirected to ``/findRoom``, ``/createRoom`` or ``joinRoom`` first.
+Redirect the users to ``/room/<roomCode>``.
+This happens automatically when first redirected to ``/findRoom``, ``/createRoom``, or ``/joinRoom``.
 
 In the example website, all of this is already implemented in ``views/index.ejs`` and **this can be tweaked into a menu for any other game**.
 
@@ -52,19 +52,19 @@ The **connection to the room** itself happens because the room file must use the
 <script defer src="../resources/js/connection.js"></script>
 ```
 
-It will also need a **Socket.io connection**.
+It also requires a **Socket.io connection**.
 
 ```html
 <script defer src="/socket.io/socket.io.js"></script>
 ```
 
-This will **connect the new user to the rest of the room users** and it will stop needing the server itself.
+This will **connect the new user to the rest of the room's users**, eliminating the need for the server itself.
 
 ### 3. Send messages through the room
 
 Once in the room, the player will need to **communicate with the rest of the players** in the room.
 
-There is an example of this in ``messages.js``
+An example of this can be found in ``messages.js``.
 
 ```js
 if(!window.isHead){
@@ -80,7 +80,7 @@ if(window.isHead){
 
 ## License
 
-This project is protected by license.
+This project is protected by a license.
 
 #
 
